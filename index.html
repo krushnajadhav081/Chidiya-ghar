@@ -5,306 +5,211 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Together Again — A Friendship Memory Wall</title>
 
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 
   <style>
-    :root{
-      --pastel-blue:#A2D2FF;
-      --pastel-pink:#FFC7D8;
-      --muted:#6b6b6b;
+    :root {
+      --pastel-blue: #A2D2FF;
+      --pastel-pink: #FFC7D8;
+      --muted: #6b6b6b;
     }
-    html,body{height:100%;margin:0;font-family:'Poppins',system-ui,-apple-systemSegoe UI,Roboto,Arial}
-    body{
-      background: linear-gradient(135deg,var(--pastel-blue) 0%,var(--pastel-pink) 100%);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      overflow-x:hidden;
-    }
-
-    /* Hearts */
-    #hearts {position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-    .heart {position:absolute;border-radius:50%;transform:rotate(45deg);opacity:0;box-shadow:0 6px 18px rgba(0,0,0,0.08);animation:floatUp linear infinite;background:rgba(255,255,255,0.55);filter:blur(6px)}
-    .heart::before,.heart::after{content:"";position:absolute;width:100%;height:100%;background:inherit;border-radius:50%}
-    .heart::before{top:-45%;left:0}
-    .heart::after{left:45%;top:0}
-    @keyframes floatUp{
-      0%{transform:translateY(110vh) rotate(45deg) scale(0.6);opacity:0}
-      10%{opacity:0.7}
-      90%{opacity:0.2}
-      100%{transform:translateY(-10vh) rotate(45deg) scale(1.1);opacity:0}
+    body {
+      margin: 0;
+      font-family: 'Poppins', system-ui, sans-serif;
+      background: linear-gradient(135deg, var(--pastel-blue), var(--pastel-pink));
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Popups */
-    .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:50}
-    .backdrop{background:rgba(10,10,15,0.6);backdrop-filter:blur(3px)}
-    .popup-card{width:min(860px,92%);background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,255,255,0.95));border-radius:18px;padding:28px;box-shadow:0 24px 60px rgba(10,10,30,0.14);text-align:center;border:4px solid rgba(255,200,220,0.6)}
-    .popup-title{font-size:28px;font-weight:700;color:#ff5b86;margin-bottom:6px}
-    .popup-sub{font-size:18px;color:#1e3a8a;margin:8px 0 14px}
+    /* --- Floating hearts container --- */
+    #hearts { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
 
-    /* Main content */
-    #main {position:relative;z-index:20;max-width:1400px;margin:48px auto;padding:12px}
-    .hero-title{display:inline-block;padding:12px 18px;border-radius:12px;background:rgba(255,255,255,0.85);font-weight:800;font-size:40px;color:#111;box-shadow:0 8px 24px rgba(0,0,0,0.12);margin-bottom:18px}
-    .subtitle{color:var(--muted);margin-bottom:18px}
+    /* --- Main --- */
+    #main { position: relative; z-index: 10; max-width: 1300px; margin: 48px auto; padding: 12px; text-align: center; }
+    .hero-title { background: rgba(255,255,255,0.85); padding: 12px 18px; border-radius: 12px; font-weight: 800; font-size: 40px; color: #111; box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .subtitle { color: var(--muted); margin-bottom: 18px; }
 
-    /* Grid */
-    .grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    @media(min-width:640px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-    @media(min-width:900px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
-    @media(min-width:1150px){.grid{grid-template-columns:repeat(6,minmax(0,1fr))}}
-    .card {background:rgba(255,255,255,0.95);border-radius:12px;overflow:hidden;cursor:zoom-in;box-shadow:0 10px 30px rgba(5,5,10,0.08);transform:translateY(8px);transition:transform .36s cubic-bezier(.16,.8,.28,1),box-shadow .36s}
-    .card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 22px 46px rgba(5,5,10,0.14)}
-    .card img{width:100%;height:260px;object-fit:cover;display:block}
-    .meta{padding:10px 12px}
-    .meta h3{margin:0;font-size:16px;color:#111;font-weight:700}
-    .meta p{margin:8px 0 0;color:#444;font-size:14px}
-    .meta .names{margin-top:8px;color:#1766d6;font-style:italic;font-size:13px}
-    .card {opacity:0;transform:scale(.98)}
-    .card.visible{opacity:1;transform:scale(1);transition:opacity .6s ease, transform .6s ease}
+    .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .card { background: rgba(255,255,255,0.95); border-radius: 12px; overflow: hidden; cursor: zoom-in; box-shadow: 0 10px 30px rgba(5,5,10,0.08); transition: transform .3s ease, box-shadow .3s ease; }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(5,5,10,0.15); }
+    .card img { width: 100%; height: 220px; object-fit: cover; display: block; }
+    .meta { padding: 10px 12px; text-align: left; }
+    .meta h3 { margin: 0; font-size: 16px; font-weight: 700; color: #111; }
+    .meta p { margin: 6px 0 0; color: #444; font-size: 14px; }
+    .names { color: #1766d6; font-style: italic; font-size: 13px; margin-top: 6px; }
 
-    /* Viewer */
-    #viewer{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(4,4,10,0.75);z-index:60;opacity:0;pointer-events:none}
-    #viewer.show{opacity:1;pointer-events:auto}
-    .viewer-box{width:min(1100px,96%);height:min(85vh,1000px);background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,250,250,0.95));border-radius:14px;display:flex;gap:12px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,0.3)}
-    .viewer-left{flex:1;background:#eee;display:flex;align-items:center;justify-content:center;padding:10px}
-    .viewer-left img{max-width:100%;max-height:100%;border-radius:10px}
-    .viewer-right{width:420px;padding:22px;display:flex;flex-direction:column;justify-content:center}
-    .close-btn{position:absolute;right:18px;top:18px;background:#ff5b86;color:#fff;border-radius:999px;border:0;padding:6px 10px;font-weight:700;cursor:pointer;box-shadow:0 10px 24px rgba(255,91,134,0.18)}
+    /* --- Overlay popups --- */
+    .overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 50; }
+    .popup-card { background: white; border-radius: 16px; padding: 28px; text-align: center; max-width: 400px; width: 90%; }
+    .popup-title { font-size: 24px; font-weight: 700; color: #ff5b86; }
+    .popup-sub { color: #333; margin-top: 10px; font-size: 16px; }
+    .btn { background: linear-gradient(90deg, var(--pastel-blue), var(--pastel-pink)); color: #fff; font-weight: 700; padding: 10px 18px; border-radius: 999px; border: none; cursor: pointer; }
 
-    @media(max-width:900px){
-      .viewer-right{width:40%}
-      .viewer-box{flex-direction:column;height:86vh}
-      .viewer-left{height:55%}
-      .viewer-right{height:45%;width:100%}
-      .card img{height:180px}
-    }
-    @media(max-width:520px){
-      .hero-title{font-size:28px}
-      .card img{height:140px}
-    }
-
-    .hidden{display:none}
-    .btn {background:linear-gradient(90deg,var(--pastel-blue),var(--pastel-pink));color:#fff;padding:10px 16px;border-radius:999px;border:0;cursor:pointer;font-weight:700}
+    /* --- Viewer --- */
+    #viewer { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); opacity: 0; pointer-events: none; transition: opacity .3s ease; z-index: 100; }
+    #viewer.show { opacity: 1; pointer-events: auto; }
+    .viewer-box { display: flex; flex-direction: column; background: #fff; border-radius: 14px; max-width: 90%; max-height: 90vh; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.3); }
+    .viewer-box img { width: 100%; object-fit: contain; max-height: 70vh; }
+    .viewer-info { padding: 16px; text-align: center; }
+    .close-btn { position: absolute; top: 16px; right: 16px; background: #ff5b86; color: #fff; border: none; border-radius: 999px; padding: 8px 12px; cursor: pointer; }
   </style>
 </head>
+
 <body>
-  <div id="hearts"></div>
+  <canvas id="hearts"></canvas>
 
-  <!-- Password modal -->
-  <div id="passwordOverlay" class="overlay backdrop">
-    <div class="popup-card" style="max-width:420px;">
-      <h2 class="popup-title">Enter Password</h2>
-      <p class="popup-sub" style="margin-bottom:12px;color:#444">This page is private — please enter the group password.</p>
-      <input id="pwd" type="password" placeholder="Password"
-             style="width:100%;padding:12px;border-radius:10px;border:1px solid #e6e6e6;margin-bottom:12px;font-size:16px">
-      <div style="display:flex;gap:10px;justify-content:center">
-        <button id="pwdBtn" class="btn">Unlock</button>
-      </div>
-      <p id="pwdErr" style="color:#c0392b;margin-top:10px;display:none">Incorrect password</p>
-    </div>
-  </div>
-
-  <!-- Intro popup -->
-  <div id="introOverlay" class="overlay backdrop hidden" aria-hidden="true">
+  <!-- Password overlay -->
+  <div id="passwordOverlay" class="overlay">
     <div class="popup-card">
-      <div style="display:flex;flex-direction:column;align-items:center">
-        <div class="popup-title">🌈 Forget the Past — Build a New Future</div>
-        <div class="popup-sub">We’ve all had misunderstandings. Our friendship is stronger than any mistake. Click continue to relive our best memories.</div>
-        <div style="margin-top:16px;font-size:13px;color:#666">• Only positive memories • Everyone consents before their photo/name appears</div>
-        <button id="continueBtn" class="btn" style="margin-top:18px">Continue 🌟</button>
-      </div>
+      <h2 class="popup-title">Enter Password</h2>
+      <p class="popup-sub">This page is private — please enter the group password.</p>
+      <input id="pwd" type="password" placeholder="Password"
+             style="width:100%;padding:12px;border-radius:10px;border:1px solid #ddd;margin-top:10px;">
+      <button id="pwdBtn" class="btn" style="margin-top:12px;">Unlock</button>
+      <p id="pwdErr" style="display:none;color:#c0392b;margin-top:8px;">Incorrect password</p>
     </div>
   </div>
 
-  <!-- Main content -->
-  <main id="main" class="hidden">
-    <div style="text-align:center;margin-bottom:12px">
-      <div class="hero-title">Together Again</div>
-      <div class="subtitle">Every photo is a story. Click any memory to relive the moment.</div>
+  <!-- Intro -->
+  <div id="introOverlay" class="overlay hidden">
+    <div class="popup-card">
+      <h2 class="popup-title">🌈 Forget the Past — Build a New Future</h2>
+      <p class="popup-sub">Our friendship is stronger than any mistake. Click continue to relive our best memories.</p>
+      <button id="continueBtn" class="btn" style="margin-top:16px;">Continue 🌟</button>
     </div>
+  </div>
 
-    <section id="gridWrap" style="padding:8px;">
-      <div id="photoGrid" class="grid"></div>
-    </section>
+  <!-- Main -->
+  <main id="main" class="hidden">
+    <div class="hero-title">Together Again</div>
+    <div class="subtitle">Every photo is a story. Click any memory to relive it.</div>
+    <div id="photoGrid" class="grid"></div>
   </main>
 
   <!-- Viewer -->
-  <div id="viewer" aria-hidden="true">
+  <div id="viewer">
     <div class="viewer-box">
       <button id="closeViewer" class="close-btn">✕</button>
-      <div class="viewer-left">
-        <img id="viewerImg" src="" alt="memory">
-      </div>
-      <div class="viewer-right">
-        <h3 id="viewerTitle" style="font-size:22px;margin:0 0 6px">Memory</h3>
-        <p id="viewerCaption" style="color:#333;margin:0 0 12px"></p>
-        <div style="font-weight:700;color:#ff5b86;margin-bottom:8px">Friends in this memory:</div>
-        <div id="viewerFriends" style="display:flex;flex-wrap:wrap;gap:8px"></div>
-        <div style="margin-top:20px;color:#777;font-size:13px">A moment cherished forever.</div>
+      <img id="viewerImg" src="" alt="">
+      <div class="viewer-info">
+        <h3 id="viewerTitle"></h3>
+        <p id="viewerCaption" style="color:#555"></p>
+        <div id="viewerFriends" style="font-size:14px;color:#ff5b86;font-weight:600;"></div>
       </div>
     </div>
   </div>
 
-  <script>
-    const PASSWORD = "AURA"; // Change to your password
-    const pwdOverlay = document.getElementById('passwordOverlay');
-    const pwdInput = document.getElementById('pwd');
-    const pwdBtn = document.getElementById('pwdBtn');
-    const pwdErr = document.getElementById('pwdErr');
-    const introOverlay = document.getElementById('introOverlay');
-    const continueBtn = document.getElementById('continueBtn');
-    const main = document.getElementById('main');
-    const photoGrid = document.getElementById('photoGrid');
-    const hearts = document.getElementById('hearts');
+<script>
+const PASSWORDS = ["parth", "krushna", "yashraj","prashant","samruddhi","laxmi","grishma","shubham","vivek","roshani","soheet"];
+const pwdInput = document.getElementById('pwd');
+const pwdBtn = document.getElementById('pwdBtn');
+const pwdErr = document.getElementById('pwdErr');
+const overlays = { password: document.getElementById('passwordOverlay'), intro: document.getElementById('introOverlay') };
+const main = document.getElementById('main');
+const continueBtn = document.getElementById('continueBtn');
+const photoGrid = document.getElementById('photoGrid');
+const viewer = document.getElementById('viewer');
+const viewerImg = document.getElementById('viewerImg');
+const viewerTitle = document.getElementById('viewerTitle');
+const viewerCaption = document.getElementById('viewerCaption');
+const viewerFriends = document.getElementById('viewerFriends');
+const closeViewer = document.getElementById('closeViewer');
 
-    const viewer = document.getElementById('viewer');
-    const viewerImg = document.getElementById('viewerImg');
-    const viewerTitle = document.getElementById('viewerTitle');
-    const viewerCaption = document.getElementById('viewerCaption');
-    const viewerFriends = document.getElementById('viewerFriends');
-    const closeViewer = document.getElementById('closeViewer');
+// Password check
+pwdBtn.onclick = () => {
+  const val = pwdInput.value.trim().toLowerCase();
+  if (PASSWORDS.includes(val)) {
+    overlays.password.style.display = 'none';
+    overlays.intro.classList.remove('hidden');
+  } else {
+    pwdErr.style.display = 'block';
+    setTimeout(() => pwdErr.style.display = 'none', 2000);
+  }
+};
 
-    // Password check
-    pwdBtn.addEventListener('click', () => {
-      const val = (pwdInput.value || '').trim();
-      if (val === PASSWORD) {
-        pwdOverlay.style.display = 'none';
-        showIntro();
-      } else {
-        pwdErr.style.display = 'block';
-        setTimeout(()=>pwdErr.style.display='none',2000);
-        pwdInput.classList.add('ring','ring-red-300');
-        setTimeout(()=>pwdInput.classList.remove('ring','ring-red-300'),1200);
-      }
-    });
+continueBtn.onclick = () => {
+  overlays.intro.classList.add('hidden');
+  main.classList.remove('hidden');
+  setTimeout(initGrid, 200);
+};
 
-    function showIntro(){
-      introOverlay.classList.remove('hidden');
-      introOverlay.setAttribute('aria-hidden','false');
+// --- Create grid ---
+function initGrid() {
+  const total = 30; // reduce count for smoother load
+  for (let i = 1; i <= total; i++) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const img = document.createElement('img');
+    img.src = `images/image${String(i).padStart(3, '0')}.jpg`;
+    img.alt = `Memory ${i}`;
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.innerHTML = `<h3>Memory ${i}</h3><p>One of our amazing moments together.</p><div class="names">Friends: Group</div>`;
+    card.append(img, meta);
+    card.onclick = () => openViewer(img.src, `Memory ${i}`, 'One of our amazing moments together.', 'Friends Group');
+    photoGrid.append(card);
+  }
+}
+
+function openViewer(src, title, caption, friends) {
+  viewerImg.src = src;
+  viewerTitle.textContent = title;
+  viewerCaption.textContent = caption;
+  viewerFriends.textContent = friends;
+  viewer.classList.add('show');
+}
+closeViewer.onclick = () => viewer.classList.remove('show');
+viewer.onclick = e => { if (e.target === viewer) viewer.classList.remove('show'); };
+document.addEventListener('keydown', e => { if (e.key === 'Escape') viewer.classList.remove('show'); });
+
+// --- Floating hearts with Canvas (super smooth) ---
+const canvas = document.getElementById('hearts');
+const ctx = canvas.getContext('2d');
+let hearts = [];
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+for (let i = 0; i < 8; i++) {
+  hearts.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    size: 10 + Math.random() * 30,
+    speed: 0.3 + Math.random() * 0.6,
+    color: Math.random() > 0.5 ? '#FFC7D8' : '#A2D2FF',
+  });
+}
+
+function drawHeart(x, y, size, color) {
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  const topCurveHeight = size * 0.3;
+  ctx.moveTo(x, y + topCurveHeight);
+  ctx.bezierCurveTo(x, y, x - size / 2, y, x - size / 2, y + topCurveHeight);
+  ctx.bezierCurveTo(x - size / 2, y + (size + topCurveHeight) / 2, x, y + size, x, y + size);
+  ctx.bezierCurveTo(x, y + size, x + size / 2, y + (size + topCurveHeight) / 2, x + size / 2, y + topCurveHeight);
+  ctx.bezierCurveTo(x + size / 2, y, x, y, x, y + topCurveHeight);
+  ctx.closePath();
+  ctx.fill();
+}
+
+function animateHearts() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let h of hearts) {
+    drawHeart(h.x, h.y, h.size, h.color);
+    h.y -= h.speed;
+    if (h.y < -h.size) {
+      h.y = canvas.height + h.size;
+      h.x = Math.random() * canvas.width;
     }
-
-    continueBtn.addEventListener('click', () => {
-      introOverlay.classList.add('hidden');
-      main.classList.remove('hidden');
-      window.setTimeout(()=>main.scrollIntoView({behavior:'smooth'}),80);
-      initGrid();
-    });
-
-    // Floating hearts
-    function spawnHearts(n=30){
-      for (let i=0;i<n;i++){
-        const el = document.createElement('div');
-        el.className = 'heart';
-        const size = 10 + Math.random()*70;
-        el.style.width = size + 'px';
-        el.style.height = size + 'px';
-        el.style.left = Math.random()*100 + 'vw';
-        el.style.top = Math.random()*100 + 'vh';
-        el.style.background = Math.random() > 0.5 ? 'rgba(255,199,216,0.55)' : 'rgba(162,210,255,0.55)';
-        el.style.animationDuration = (10 + Math.random()*18) + 's';
-        el.style.animationDelay = (-Math.random()*18) + 's';
-        hearts.appendChild(el);
-      }
-    }
-
-    // --- Dynamic memories array ---
-    const memories = [];
-    const totalImages = 100; // Change if you have more
-    for (let i = 1; i <= totalImages; i++) {
-      const num = String(i).padStart(3,'0');
-      ['jpg','jpeg','png'].forEach(ext => {
-        memories.push({
-          file: `images/image${num}.${ext}`,
-          title: `Memory ${i}`,
-          caption: `One of our amazing moments together (#${i}).`,
-          names: 'Friends Group'
-        });
-      });
-    }
-
-    function initGrid(){
-      if (!memories || !memories.length){
-        const msg = document.createElement('div');
-        msg.textContent = 'No memories yet — add your images to the "memories" array in the script.';
-        msg.className = 'p-6 bg-white/80 rounded-md text-center text-gray-700';
-        photoGrid.appendChild(msg);
-        return;
-      }
-
-      memories.forEach((m) => {
-        const card = document.createElement('article');
-        card.className = 'card';
-
-        const img = document.createElement('img');
-        img.dataset.src = m.file;
-        img.alt = m.title || 'memory';
-        img.loading = 'lazy';
-
-        const meta = document.createElement('div');
-        meta.className = 'meta';
-        const h = document.createElement('h3'); h.textContent = m.title || '';
-        const p = document.createElement('p'); p.textContent = m.caption || '';
-        const nm = document.createElement('div'); nm.className='names'; nm.textContent = 'Friends: '+(m.names||'');
-        meta.appendChild(h); meta.appendChild(p); meta.appendChild(nm);
-
-        card.appendChild(img); card.appendChild(meta);
-
-        card.addEventListener('click', ()=>openViewer(m));
-
-        photoGrid.appendChild(card);
-      });
-
-      const imgs = document.querySelectorAll('img[data-src]');
-      const io = new IntersectionObserver((entries, obs) => {
-        entries.forEach(ent => {
-          if (!ent.isIntersecting) return;
-          const img = ent.target;
-          img.src = img.dataset.src;
-          img.addEventListener('load', () => {
-            const card = img.closest('.card');
-            card.classList.add('visible');
-          });
-          obs.unobserve(img);
-        });
-      }, {rootMargin:'200px 0px',threshold:0.01});
-      imgs.forEach(i=>io.observe(i));
-    }
-
-    function openViewer(item){
-      viewerImg.src = item.file;
-      viewerTitle.textContent = item.title || 'Memory';
-      viewerCaption.textContent = item.caption || '';
-      viewerFriends.innerHTML = '';
-      (item.names||'').split(',').map(s=>s.trim()).filter(Boolean).forEach(name=>{
-        const pill = document.createElement('span');
-        pill.textContent = name;
-        pill.style.padding='6px 10px';
-        pill.style.borderRadius='999px';
-        pill.style.background='#ffe6ee';
-        pill.style.color='#b91c6b';
-        pill.style.fontWeight='600';
-        pill.style.marginRight='8px';
-        pill.style.marginBottom='8px';
-        viewerFriends.appendChild(pill);
-      });
-      viewer.classList.add('show'); viewer.style.zIndex=120;
-      viewer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
-    }
-
-    function closeViewerFn(){
-      viewer.classList.remove('show'); viewer.style.zIndex='';
-      viewer.setAttribute('aria-hidden','true'); document.body.style.overflow='';
-    }
-
-    closeViewer.addEventListener('click', closeViewerFn);
-    viewer.addEventListener('click', (e)=>{if(e.target===viewer)closeViewerFn()});
-    document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeViewerFn()});
-
-    window.addEventListener('load', ()=>spawnHearts(28));
-    pwdInput?.addEventListener && pwdInput.addEventListener('keydown', (e)=>{if(e.key==='Enter') pwdBtn.click();});
-  </script>
+  }
+  requestAnimationFrame(animateHearts);
+}
+animateHearts();
+</script>
 </body>
 </html>

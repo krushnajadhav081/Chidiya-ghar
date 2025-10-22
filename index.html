@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Together Again — A Friendship Memory Wall</title>
-
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 
@@ -22,11 +22,9 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* --- Floating hearts container --- */
     #hearts { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-
-    /* --- Main --- */
     #main { position: relative; z-index: 10; max-width: 1300px; margin: 48px auto; padding: 12px; text-align: center; }
+
     .hero-title { background: rgba(255,255,255,0.85); padding: 12px 18px; border-radius: 12px; font-weight: 800; font-size: 40px; color: #111; box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
     .subtitle { color: var(--muted); margin-bottom: 18px; }
 
@@ -39,14 +37,12 @@
     .meta p { margin: 6px 0 0; color: #444; font-size: 14px; }
     .names { color: #1766d6; font-style: italic; font-size: 13px; margin-top: 6px; }
 
-    /* --- Overlay popups --- */
     .overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 50; }
     .popup-card { background: white; border-radius: 16px; padding: 28px; text-align: center; max-width: 400px; width: 90%; }
     .popup-title { font-size: 24px; font-weight: 700; color: #ff5b86; }
     .popup-sub { color: #333; margin-top: 10px; font-size: 16px; }
     .btn { background: linear-gradient(90deg, var(--pastel-blue), var(--pastel-pink)); color: #fff; font-weight: 700; padding: 10px 18px; border-radius: 999px; border: none; cursor: pointer; }
 
-    /* --- Viewer --- */
     #viewer { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.75); opacity: 0; pointer-events: none; transition: opacity .3s ease; z-index: 100; }
     #viewer.show { opacity: 1; pointer-events: auto; }
     .viewer-box { display: flex; flex-direction: column; background: #fff; border-radius: 14px; max-width: 90%; max-height: 90vh; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.3); }
@@ -101,7 +97,7 @@
   </div>
 
 <script>
-const PASSWORDS = ["parth" , "ashwini", "krushna", "yashraj","prashant","samruddhi","laxmi","grishma","shubham","vivek","roshani","soheet"];
+const PASSWORDS = ["parth","ashwini","krushna","yashraj","prashant","samruddhi","laxmi","grishma","shubham","vivek","roshani","soheet"];
 const pwdInput = document.getElementById('pwd');
 const pwdBtn = document.getElementById('pwdBtn');
 const pwdErr = document.getElementById('pwdErr');
@@ -116,10 +112,19 @@ const viewerCaption = document.getElementById('viewerCaption');
 const viewerFriends = document.getElementById('viewerFriends');
 const closeViewer = document.getElementById('closeViewer');
 
+// Preload images in background for smooth showing
+function preloadImages(total) {
+  for (let i = 1; i <= total; i++) {
+    const img = new Image();
+    img.src = `images/image${String(i).padStart(3, '0')}.jpg`;
+  }
+}
+
 // Password check
 pwdBtn.onclick = () => {
   const val = pwdInput.value.trim().toLowerCase();
   if (PASSWORDS.includes(val)) {
+    preloadImages(35);
     overlays.password.style.display = 'none';
     overlays.intro.classList.remove('hidden');
   } else {
@@ -134,13 +139,14 @@ continueBtn.onclick = () => {
   setTimeout(initGrid, 200);
 };
 
-// --- Create grid ---
+// Create grid with lazy loading
 function initGrid() {
-  const total = 35; // reduce count for smoother load
+  const total = 35;
   for (let i = 1; i <= total; i++) {
     const card = document.createElement('div');
     card.className = 'card';
     const img = document.createElement('img');
+    img.loading = "lazy"; // <-- Lazy load optimization
     img.src = `images/image${String(i).padStart(3, '0')}.jpg`;
     img.alt = `Memory ${i}`;
     const meta = document.createElement('div');
@@ -163,7 +169,7 @@ closeViewer.onclick = () => viewer.classList.remove('show');
 viewer.onclick = e => { if (e.target === viewer) viewer.classList.remove('show'); };
 document.addEventListener('keydown', e => { if (e.key === 'Escape') viewer.classList.remove('show'); });
 
-// --- Floating hearts with Canvas (super smooth) ---
+// Floating hearts animation
 const canvas = document.getElementById('hearts');
 const ctx = canvas.getContext('2d');
 let hearts = [];
@@ -213,3 +219,4 @@ animateHearts();
 </script>
 </body>
 </html>
+  
